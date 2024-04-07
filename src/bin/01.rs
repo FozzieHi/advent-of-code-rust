@@ -28,27 +28,19 @@ pub fn part_two(input: &str) -> Option<i32> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use itertools::Itertools;
-
-    fn test_part<F>(part_fn: F, file_part: u8)
-    where
-        F: Fn(&str) -> Option<i32>,
-    {
-        advent_of_code::template::read_file_part("examples", DAY, file_part)
-            .lines()
-            .for_each(|line| {
-                let (input, expected_str) = line.split_whitespace().collect_tuple().unwrap();
-                assert_eq!(part_fn(input), Some(expected_str.parse().unwrap()));
-            });
-    }
+    use advent_of_code::{get_part_line};
 
     #[test]
     fn test_part_one() {
-        test_part(part_one, 1);
+        get_part_line(DAY, 1).iter().for_each(|(input, expected)| {
+            assert_eq!(part_one(input), Some(*expected as i32));
+        });
     }
 
     #[test]
     fn test_part_two() {
-        test_part(part_two, 2);
+        get_part_line(DAY, 2).iter().for_each(|(input, expected)| {
+            assert_eq!(part_two(input), Some(*expected as i32));
+        });
     }
 }
