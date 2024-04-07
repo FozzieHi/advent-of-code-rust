@@ -28,7 +28,7 @@ pub fn part_two(input: &str) -> Option<i32> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use advent_of_code::{get_part_line};
+    use advent_of_code::get_part_line;
 
     #[test]
     fn test_part_one() {
