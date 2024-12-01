@@ -1,7 +1,9 @@
+use std::collections::HashMap;
+
 advent_of_code::solution!(1);
 
-pub fn part_one(input: &str) -> Option<u32> {
-    let parsed: Vec<(i32, i32)> = input
+fn parse(input: &str) -> Vec<(i32, i32)> {
+    input
         .lines()
         .filter_map(|line| {
             let mut parts = line.split_whitespace();
@@ -14,20 +16,38 @@ pub fn part_one(input: &str) -> Option<u32> {
                 _ => None,
             }
         })
-        .collect();
+        .collect()
+}
 
-    let (mut list_a, mut list_b): (Vec<i32>, Vec<i32>) = parsed.into_iter().unzip();
+pub fn part_one(input: &str) -> Option<u32> {
+    let (mut list_a, mut list_b): (Vec<i32>, Vec<i32>) = parse(input).into_iter().unzip();
 
     list_a.sort_unstable();
     list_b.sort_unstable();
 
-    let total: i32 = list_a.iter().zip(list_b).map(|(a, b)| (a - b).abs()).sum();
+    let total: i32 = list_a
+        .into_iter()
+        .zip(list_b)
+        .map(|(a, b)| (a - b).abs())
+        .sum();
 
     u32::try_from(total).ok()
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    None
+    let (list_a, list_b): (Vec<i32>, Vec<i32>) = parse(input).into_iter().unzip();
+
+    let occurrences = list_b.into_iter().fold(HashMap::new(), |mut acc, item| {
+        *acc.entry(item).or_default() += 1;
+        acc
+    });
+
+    let total: i32 = list_a
+        .into_iter()
+        .map(|a| a * occurrences.get(&a).unwrap_or(&0))
+        .sum();
+
+    u32::try_from(total).ok()
 }
 
 #[cfg(test)]
